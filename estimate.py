@@ -30,7 +30,7 @@ def calc_v_tilda(data: GaoData) -> np.ndarray:
         lambda v: -calc_L_grad(data, v),
         np.random.rand(data.p),
         alpha=1 / (data.p * data.L),
-        max_iter=100,
+        max_iter=1000,
         f=lambda v: -calc_L(data, v),
     )[0]
 
@@ -40,6 +40,6 @@ def calc_v_g_tilda(data: GaoData, g_l: float) -> np.ndarray:
         lambda v: -calc_L_g_grad(data, v, g_l),
         np.random.rand(data.p),
         alpha=1 / (g_l + data.p * data.L),
-        max_iter=100,
+        max_iter=1000,
         f=lambda v: -calc_L_g(data, v, g_l),
     )[0]

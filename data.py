@@ -2,8 +2,10 @@ from typing import Tuple
 import numpy as np
 from collections import deque
 
+
 def phi_1(x: float) -> float:
     return 1 / (1 + np.exp(-x))
+
 
 def is_connected(N: np.ndarray) -> bool:
     used = np.zeros(N.shape[0])
@@ -16,6 +18,8 @@ def is_connected(N: np.ndarray) -> bool:
                 used[u] = 1
                 q.append(u)
     return np.all(used)
+
+
 class GaoData:
     """
     p: number of players
@@ -26,6 +30,7 @@ class GaoData:
     generates connected Erdos-Renyi graph with edge_prob probability ! bias, it's connected?
     generates v_i ~ uniform(v_range)
     """
+
     def __init__(
         self, p: int, edge_prob: float, L: int, v_range: Tuple[float, float]
     ):
