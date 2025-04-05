@@ -5,7 +5,7 @@ from data import GaoData
 def phi(v: float) -> float:
     return np.log(1 + np.exp(v))
 
-
+ 
 def phi_1(v: float) -> float:  # == sigmoid(v)
     return 1 / (1 + np.exp(-v))
 

@@ -22,5 +22,6 @@ def GradientDescent(
             iter_log.append(i)
         if np.linalg.norm(grad) < tol:
             break
+    # TODO check convergence
 
     return x, f_log, iter_log
