@@ -32,20 +32,25 @@ class GaoData:
     """
 
     def __init__(
-        self, p: int, edge_prob: float, L: int, v_range: Tuple[float, float]
+        self,
+        p: int,
+        edge_prob: float,
+        L: int,
+        v_range: Tuple[float, float],
+        generate: bool = True,
     ):
         self.p = p
         self.edge_prob = edge_prob
         self.v_range = v_range
         self.L = L
-        self.F = np.zeros((p, p))
         self.v = np.zeros(p)
         self.N = np.zeros((p, p))
-        self.D = np.zeros(p)
         self.S = np.zeros((p, p))
-        self.generate_v()
-        self.generate_graph()
-        self.generate_games()
+
+        if generate:
+            self.generate_v()
+            self.generate_graph()
+            self.generate_games()
 
     def generate_v(self):
         self.v = (
