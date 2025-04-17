@@ -1,21 +1,22 @@
 import numpy as np
 from data import GaoData
+from scipy.special import expit, logsumexp
 
 
-def phi(v: float) -> float:
-    return np.log(1 + np.exp(v))
+def phi(v: float) -> float:  # == softplus(v)
+    return logsumexp([0, v], axis=0)  # log(1 + exp(v)) = softplus(v)
 
- 
+
 def phi_1(v: float) -> float:  # == sigmoid(v)
-    return 1 / (1 + np.exp(-v))
+    return expit(v)
 
 
 def phi_2(v: float) -> float:  # == sigmoid'(v) = sigmoid(v) * (1 - sigmoid(v))
-    return np.exp(v) / (1 + np.exp(v)) ** 2
+    return expit(v) * (1 - expit(v))
 
 
 def p_win(v_i: float, v_j: float) -> float:  # == sigmoid(v_i - v_j)
-    return 1 / (1 + np.exp(v_j - v_i))
+    return expit(v_i - v_j)
 
 
 def log_p_win(v_i: float, v_j: float) -> float:
@@ -89,3 +90,24 @@ def calc_L_grad(data: GaoData, v: np.ndarray) -> np.ndarray:
 
 def calc_L_hess(data: GaoData, v: np.ndarray) -> np.ndarray:
     return -F(v, data.N)
+
+
+def calc_zeta(data: GaoData, v: np.ndarray) -> np.ndarray:
+    result = 0
+    for m in range(data.p):
+        for j in range(m):
+            result += (v[j] - v[m]) * (
+                data.S[j, m] - data.N[j, m] * p_win(data.v[j], data.v[m])
+            )
+    return result
+
+
+def calc_zeta_grad(data: GaoData, v: np.ndarray) -> np.ndarray:
+    result = np.zeros(data.p)
+    for j in range(data.p):
+        for m in range(data.p):
+            if j != m:
+                result[j] += data.S[j, m] - data.N[j, m] * p_win(
+                    data.v[j], data.v[m]
+                )
+    return result
